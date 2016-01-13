@@ -1,0 +1,174 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Synced Small Multiples</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.css" />
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.ie.css" />
+    <![endif]-->
+    <style type="text/css">
+        html, body { width: 100%; height: 100%; margin: 0; }
+        #map1, #map2, #map3, #map4 { width: 49.5%; height: 49.5%; }
+        #map1 { position: absolute; left: 0; top: 0; }
+        #map2 { position: absolute; right: 0%; top: 0; }
+        #map3 { position: absolute; left: 0; bottom: 0%; }
+        #map4 { position: absolute; right: 0%; bottom: 0%; }
+    </style>
+</head>
+
+<body>
+    <div id="map1"></div>
+    <div id="map2"></div>
+    <div id="map3"></div>
+    <div id="map4"></div>
+    <script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
+    <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+    <script type="text/javascript">
+
+    var layer1 = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png');
+    var layer2 = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png');
+    var layer3 = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png');
+    var layer4 = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png');
+
+    var map1 = L.map('map1', {
+        // layers: [layer1, json],
+        layers: [layer1],
+        center: [32.7990,-86.8073],
+        zoom: 6
+    });
+
+    map1.attributionControl.setPrefix('');
+
+    var map2 = L.map('map2', {
+        layers: [layer2],
+        center: [32.7990,-86.8073],
+        zoom: 6,
+        zoomControl: false
+    });
+
+    map2.attributionControl.setPrefix('');
+
+    var map3 = L.map('map3', {
+        layers: [layer3],
+        center: [32.7990,-86.8073],
+        zoom: 6,
+        zoomControl: false
+    });
+
+    map3.attributionControl.setPrefix('');
+
+    var map4 = L.map('map4', {
+        layers: [layer4],
+        center: [32.7990,-86.8073],
+        zoom: 6,
+        zoomControl: false
+    });
+
+    var stateLayer1 = L.geoJson(null, {
+      filter: function(feature, layer){
+        return feature.properties.sB01001e27 > 80 ? true : false;
+      },
+      style: function(feature, layer){
+        return { 
+          fillColor: feature.properties.sB01001e27 > 80 ? 'rgba(' 
+            + Math.round(46 * (feature.properties.sB01001e27 - 60) / 20) + ', ' 
+            + Math.round(204 * (feature.properties.sB01001e27 - 60) / 20) + ', ' 
+            + Math.round(113 * (feature.properties.sB01001e27 - 60) / 20) + ', 1)' : 'rgba(0,0,0,0.0)',
+          color: 'rgb(46,204,113)',
+          opacity: .5,
+          weight: 2,
+          fillOpacity: 1
+         };
+      }
+    });
+
+    var stateLayer2 = L.geoJson(null, {
+      filter: function(feature, layer){
+        return feature.properties.sB07001e17 > 80 ? true : false;
+      },
+      style: function(feature, layer){
+        return { 
+          fillColor: feature.properties.sB07001e17 > 80 ? 'rgba(' 
+            + Math.round(142 * (feature.properties.sB07001e17 - 60) / 20) + ', ' 
+            + Math.round(68 * (feature.properties.sB07001e17 - 60) / 20) + ', ' 
+            + Math.round(173 * (feature.properties.sB07001e17 - 60) / 20) + ', 1)' : 'rgba(0,0,0,0.0)',
+          color: 'rgb(142,68,173)',
+          opacity: .5,
+          weight: 2,
+          fillOpacity: 1
+         };
+      }
+    });
+
+    var stateLayer3 = L.geoJson(null, {
+      filter: function(feature, layer){
+        return feature.properties.sB22002e2 > 80 ? true : false;
+      },
+      style: function(feature, layer){
+        return { 
+          fillColor: feature.properties.sB22002e2 > 80 ? 'rgba(' 
+            + Math.round(41 * (feature.properties.sB22002e2 - 60) / 20) + ', ' 
+            + Math.round(128 * (feature.properties.sB22002e2 - 60) / 20) + ', ' 
+            + Math.round(185 * (feature.properties.sB22002e2 - 60) / 20) + ', 1)' : 'rgba(0,0,0,0.0)',
+          color: 'rgb(52,152,219)',
+          opacity: .5,
+          weight: 2,
+          fillOpacity: 1
+         };
+      }
+    });
+
+    var stateLayer4 = L.geoJson(null, {
+      filter: function(feature, layer){
+        return feature.properties.f > 10 ? true : false;
+      },
+      style: function(feature, layer){
+        return { 
+          fillColor: feature.properties.f > 10 ? 'rgba(241, 204, 113, 1)' : 'rgba(0,0,0,0.0)',
+          color: 'rgb(241,204,113)',
+          opacity: .5,
+          weight: 2,
+          fillOpacity: 1
+         };
+      }
+    });
+    omnivore.topojson('../tracts/gz_2010_01_140_00_500k.zip.topojson', null, stateLayer1).addTo(map1);
+    omnivore.topojson('../tracts/gz_2010_01_140_00_500k.zip.topojson', null, stateLayer2).addTo(map2);
+    omnivore.topojson('../tracts/gz_2010_01_140_00_500k.zip.topojson', null, stateLayer3).addTo(map3);
+    omnivore.topojson('../tracts/gz_2010_01_140_00_500k.zip.topojson', null, stateLayer4).addTo(map4);
+
+    // Sync maps using https://www.mapbox.com/mapbox.js/example/v1.0.0/sync-layer-movement/ tutorial
+    map1.on('moveend', follow).on('zoomend', follow);
+    map2.on('moveend', follow).on('zoomend', follow);
+    map3.on('moveend', follow).on('zoomend', follow);
+    map4.on('moveend', follow).on('zoomend', follow);
+
+    // quiet is a cheap and dirty way of avoiding a problem in which one map
+    // syncing to another leads to the other map syncing to it, and so on
+    // ad infinitum. this says that while we are calling sync, do not try to 
+    // loop again and sync other maps
+    var quiet = false;
+    function follow(e) {
+        if (quiet) return;
+        quiet = true;
+        if (e.target === map1) { sync(map2, e); sync(map3, e); sync(map4, e); }
+        if (e.target === map2) { sync(map1, e); sync(map3, e); sync(map4, e); }
+        if (e.target === map3) { sync(map1, e); sync(map2, e); sync(map4, e); }
+        if (e.target === map4) { sync(map1, e); sync(map2, e); sync(map3, e); }
+        quiet = false;
+    }
+
+    // sync simply steals the settings from the moved map (e.target)
+    // and applies them to the other map.
+    function sync(map, e) {
+        map.setView(e.target.getCenter(), e.target.getZoom(), {
+            animate: false,
+            reset: true
+        });
+    }
+
+    </script>
+</body>
+</html>

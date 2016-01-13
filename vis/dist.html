@@ -1,0 +1,26 @@
+<html>
+<div id="chartContainer">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
+<script type="text/javascript">
+    var svg = dimple.newSvg("#chartContainer", '100%', '100%');
+    d3.json("dist.json", function (data) {
+        var myChart = new dimple.chart(svg, data),
+        // myChart.setBounds(60, 30, 510, 305)
+        xAxis = myChart.addMeasureAxis("x", "value"),
+        yAxis = myChart.addMeasureAxis("y", "count"),
+        // color = myChart.addColorAxis("value",["rgb(192, 57, 43)", "rgb(192, 57, 43)"]),
+        mySeries = myChart.addSeries("value", dimple.plot.bubble);
+        myChart.defaultColors = [
+            new dimple.color("#E74C3C", "#2980b9", 1)
+        ];
+        xAxis.ticks = 20;
+        xAxis.overrideMax = 60;
+        xAxis.title = '# of Financial Complaints in a Census Tract';
+        yAxis.title = 'Count';
+        myChart.draw();
+
+    });
+  </script>
+</div>
+</html>

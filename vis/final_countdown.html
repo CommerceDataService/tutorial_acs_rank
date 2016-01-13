@@ -1,0 +1,256 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>final countdown</title>
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0"/>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
+<script src="../js/corslite.js"></script>
+<script src="../js/geojson-vt.js"></script>
+<style>
+body {padding: 0; margin: 0}
+html, body {height: 100%; width: 100%;}
+#mapdiv {height: 50%; width: 100%;}
+.leaflet-container {background: #fff;}
+</style>
+</head>
+<body>
+<div id="mapdiv">
+<script>
+
+var std = L.tileLayer(
+  'http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+    attribution: 'ACS 5-Year Estimates | CFPB Financial Complaint Database'
+  });
+
+// rgb(231, 76, 60)
+function initFeatures(data) {
+  var counter = 0;
+  for (var i = 0; i < data.features.length; i++) {
+      data.features[i].properties.color = (data.features[i].properties.r > 70 && data.features[i].properties.f > 10) ? 'rgba(' 
+        + Math.round(231 * (data.features[i].properties.r - 50) / 50) + ', ' 
+        + Math.round(76 * (data.features[i].properties.r - 50) / 50) + ', ' 
+        + Math.round(60 * (data.features[i].properties.r - 50) / 50) + ', 1)' : 'rgba(0,0,0,0.0)';
+      data.features[i].properties.inview = 1;
+      counter += data.features[i].geometry.coordinates[0].length;
+  }
+  return counter;
+}
+
+function checkBounds(data, bounds) {
+  var counter = 0;
+  for (var i = 0; i < data.features.length; i++) {
+      if (bounds.contains([data.features[i].properties.y, data.features[i].properties.x])) {
+        data.features[i].properties.inview = 1;
+      }
+      else {
+        data.features[i].properties.inview = 0;
+      }
+      counter += data.features[i].geometry.coordinates[0].length;
+  }
+  return counter;
+}
+
+function filterData (data) {
+  var chartdata = [];
+  for (var i = 0; i < data.features.length; i++) {
+      if (data.features[i].properties.inview == 1 && data.features[i].properties.r > 70 && data.features[i].properties.f > 10) {
+        chartdata.push({"Location":data.features[i].properties.g,  "Need":data.features[i].properties.r});
+      }
+  }
+  return chartdata.sort(function(a, b){return b.Need-a.Need}).slice(0,10);
+}
+
+var canvas = L.tileLayer.canvas();
+var tileIndex;
+var options = {maxZoom: 12, baseZoom: 18, maxPoints: 100, debug: 1};
+corslite('../tracts/us_all_tracts.topojson', function(err, resp) {
+  data = JSON.parse(resp.response);
+  if (JSON.parse(resp.response).type === 'Topology') {
+            var firstKey = Object.keys(data.objects)[0];
+            data = topojson.feature(data, data.objects[firstKey]);
+        };
+  initFeatures(data);
+  tileIndex = geojsonvt(data, options);
+  canvas.drawTile = function(canvas, tilePoint, zoom) {
+    var ctx = canvas.getContext('2d');
+    var tile = tileIndex.getTile(zoom, tilePoint.x, tilePoint.y);
+    if(!tile) return;
+    ctx.lineWidth = 0.01;
+    var features = tile.features;
+    // ctx.strokeStyle = 'rgb(236, 240, 241)';
+    for (var i = 0; i < features.length; i++) {
+      var feature = features[i], 
+        typeChanged = type !== feature.type,
+        type = feature.type;
+      ctx.fillStyle = feature.tags.color ? feature.tags.color : 'rgba(255,0,0,0.05)';
+      // ctx.fillStyle = feature.tags.color ? 'rgb(192, 57, 43)' : 'rgba(255,0,0,0.05)';
+      ctx.beginPath();
+      for (var j = 0; j < feature.geometry.length; j++) {
+        var ring = feature.geometry[j];
+        for (var k = 0; k < ring.length; k++) {
+          var p = ring[k];
+          if (k) ctx.lineTo(p[0] / 16.0, p[1] / 16.0);
+          else ctx.moveTo(p[0] / 16.0, p[1] / 16.0);
+        }
+      }
+      if (type === 3) ctx.fill('evenodd');
+      ctx.stroke();
+    }
+  };
+  var map = L.map('mapdiv', {
+    center: [37.8, -96], zoom: 4,
+    maxZoom: 12, minZoom: 4,
+    layers: [std, canvas]});
+  checkBounds(data, map.getBounds());
+  var svg = dimple.newSvg("body", "100%", "50%");
+  // Add custom background color
+  svg.append("rect")
+    .attr("width", "100%")
+    .attr("height", "100%")
+    .style("fill", "rgb(44, 62, 80)"); 
+  var topten = new dimple.chart(svg, filterData(data)),
+    y = topten.addCategoryAxis("y", "Location"),
+    x = topten.addMeasureAxis("x", "Need"),
+    // color = topten.addColorAxis("Need",["rgb(149, 165, 166)", "rgb(192, 57, 43)"]),
+    color = topten.addColorAxis("Need",["rgb(192, 57, 43)", "rgb(192, 57, 43)"]),
+    series = topten.addSeries("Location", dimple.plot.bar);
+    series.x = x;
+    // console.log(series);
+
+  y.addOrderRule("Need");
+  x.hidden = true;
+  y.hidden = true;
+
+  svg.append("text")
+    .attr('id', 'title')
+    .attr("x", topten._xPixels() + topten._widthPixels() / 2)
+    .attr("y", topten._yPixels() - 20)
+    .style("text-anchor", "middle")
+    .style("fill", "rgb(236, 240, 241)")
+    .style("font-family", "Helvetica")
+    .style("font-size", "12px")
+    // .style("font-weight", "bold")
+    .text("Top Census Tracts with Girls under 5, who have lived in the same house,");
+  svg.append("text")
+    .attr('id', 'title')
+    .attr("x", topten._xPixels() + topten._widthPixels() / 2)
+    .attr("y", topten._yPixels() - 5)
+    .style("text-anchor", "middle")
+    .style("fill", "rgb(236, 240, 241)")
+    .style("font-family", "Helvetica")
+    .style("font-size", "12px")
+    // .style("font-weight", "bold")
+    .text("and collected SNAP benefits over the last year and whose household have made financial complaints");
+
+  // topten.defaultColors = [
+  //   new dimple.color("#E74C3C", "#2980b9", 1),
+  //   new dimple.color("#E2594B", "#2980b9", 1),
+  //   new dimple.color("#DD665A", "#2980b9", 1),
+  //   new dimple.color("#D9736A", "#2980b9", 1),
+  //   new dimple.color("#D48079", "#2980b9", 1),
+  //   new dimple.color("#CF8E89", "#2980b9", 1),
+  //   new dimple.color("#CB9B98", "#2980b9", 1),
+  //   new dimple.color("#C6A8A8", "#2980b9", 1),
+  //   new dimple.color("#C1B5B7", "#2980b9", 1),
+  //   new dimple.color("#BDC3C7", "#2980b9", 1),
+  // ];
+
+  // Add location labels, taken from http://dimplejs.org/advanced_examples_viewer.html?id=advanced_custom_styling
+  series.afterDraw = function (s, d) {
+
+    var shape = d3.select(s),
+      labels = svg.append('g');
+
+    console.log(shape);
+
+    svg.append("rect")
+      .attr("id", "shading")
+      .attr("x", shape.attr("x"))
+      .attr("y", shape.attr("y"))
+      .attr("height", (0.5 * shape.attr("height")) / 1.61803398875)
+      .attr("width", shape.attr("width"))
+      .style("fill", shape.attr("stroke"))
+      .style("opacity", 1)
+      .style("pointer-events", "none");
+
+    labels.append("text")
+      .attr('id', 'label-location')
+      .attr("x", shape.attr("width") > 325 ? parseFloat(shape.attr("x")) + 20 : parseFloat(shape.attr("x")) + parseFloat(shape.attr("width")) + 20)
+      .attr("y", parseFloat(shape.attr("y")) + (shape.attr("height") / 2 + 8))
+      .style("font-family", "helvetica")
+      .style("text-anchor", "start")
+      .style("font-size", "14px")
+      .style("fill", "rgb(236, 240, 241)")
+      .style("pointer-events", "none")
+      .text(y._getFormat()(d.y));
+  };
+
+  // Add need information on mouseover
+  series.addEventHandler("mouseover", function (e){
+    // Draw the text information in the bottom right corner
+    svg.selectAll(".dimple-hover-text")
+      .data(["Average Percentile Rank: " + d3.format(",.f")(e.colorValue)])
+        .enter()
+        .append("text")
+        .attr("class", "dimple-hover-text")
+        // .attr("x", topten._xPixels()  + topten._widthPixels() + 50)
+        .attr("x", topten._xPixels() + topten._widthPixels() / 2)
+        // .attr("y", function (d, i) { return topten._heightPixels() + 10 + i * 25; })
+        .attr("y", topten._heightPixels() + 60)
+        .style("font-family", "helvetica")
+        .style("text-anchor", "middle")
+        .style("font-size", "20px")
+        .style("fill", "rgb(236, 240, 241)")
+        .style("pointer-events", "none")
+        .text(function (d) { return d; });
+  });
+
+  series.addEventHandler("mouseleave", function (e) {
+    svg.selectAll(".dimple-hover-text").remove();
+  });
+
+  topten.draw();
+
+  map.on('move', function(){
+    checkBounds(data, map.getBounds());
+    canvas.drawTile = function(canvas, tilePoint, zoom) {
+    var ctx = canvas.getContext('2d');
+    var tile = tileIndex.getTile(zoom, tilePoint.x, tilePoint.y);
+    if(!tile) return;
+    ctx.lineWidth = 0.01;
+    var features = tile.features;
+    // ctx.strokeStyle = 'rgb(149, 165, 166)';
+    for (var i = 0; i < features.length; i++) {
+      var feature = features[i], 
+        typeChanged = type !== feature.type,
+        type = feature.type;
+      ctx.fillStyle = feature.tags.color ? feature.tags.color : 'rgba(255,0,0,0.05)';
+      ctx.beginPath();
+      for (var j = 0; j < feature.geometry.length; j++) {
+        var ring = feature.geometry[j];
+        for (var k = 0; k < ring.length; k++) {
+          var p = ring[k];
+          if (k) ctx.lineTo(p[0] / 16.0, p[1] / 16.0);
+          else ctx.moveTo(p[0] / 16.0, p[1] / 16.0);
+        }
+      }
+      if (type === 3) ctx.fill('evenodd');
+      ctx.stroke();
+    }
+  };
+  // Remove previous labels, update and redraw
+  svg.selectAll('#label-location').remove();
+  svg.selectAll('#shading').remove();
+  topten.data = filterData(data);
+  topten.draw(1000);
+  });
+}, true);
+
+</script>
+</body>
+</html>
