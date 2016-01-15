@@ -176,7 +176,7 @@ aside {
     text-align: center;
     color: #fff;
     background-image: url(../img/word_cloud.png);
-
+    background-repeat: no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
