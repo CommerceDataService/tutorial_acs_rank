@@ -136,17 +136,17 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 <!--Cover-->
 
-    <section class="scroll backie datacorps" id="top">
+    <section class="scroll backie " id="top">
         <div class="header-content">
-            <div class="header-content-inner" >
-                <h2 style="position:absolute;left:15%; top:40%;text-align:left;">
+            <div class="header-content-inner">
+                <h2 style="position:absolute;left:15%; top:40%;text-align:left;background-color:black;border-radius:10px;opacity:0.9;">
                     <div id="woot">
                         <span style="font-size:150%;line-height:1.3;" >
-                          parsing the  <br>american<br>community<br>survey</strong></span><br>
-                          <a id = "btn" href="https://github.com/StarCYing/usds_rank/zipball/master"> <strong>ZIP File</strong></a>
-                          <a id = "btn" href="https://github.com/StarCYing/usds_rank/tarball/master"> <strong>TAR Ball</strong></a>
-                          <a id = "btn" href="https://github.com/StarCYing/usds_rank"><strong>GitHub</strong></a>
-                          <p><br>Using <strong> Python, D3.js,<br>Leaflet.js, Leaflet-omnivore.js,<br>TopoJSON.js, GeoJSON-VT.js<br>and Dimple.js</strong> to visualize the nation</p>
+                          focusing <br>outreach using<br>survey data</strong></span><br>
+                          <a id = "btn" href="https://github.com/CommerceDataService/tutorial_acs_rank/zipball/master"> <strong>ZIP File</strong></a>
+                          <a id = "btn" href="https://github.com/CommerceDataService/tutorial_acs_rank/tarball/master"> <strong>TAR Ball</strong></a>
+                          <a id = "btn" href="https://github.com/CommerceDataService/tutorial_acs_rank"><strong>GitHub</strong></a>
+                          <p><br>Using <strong> Python, D3.js,<br>Leaflet.js, Leaflet-omnivore.js,<br>TopoJSON.js, GeoJSON-VT.js<br>and Dimple.js</strong></p>
                       </div>
                 </h2>
             </div>
@@ -180,7 +180,8 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
                 <div class="col-lg-7">
                   <p style="font-family:Helvetica;"><span style="font-size:150%;color:darkred;"><strong>Every month, hundreds of thousands of households fill out the American Community Survey.</strong></span>
                     <br>
-                    The <a href="https://www.census.gov/programs-surveys/acs/">American Community Survey (ACS)</a>, the single largest survey conducted by the <a href="http://www.census.gov/">United States Census Bureau</a> besides the Decennial Census, is designed to provide insight into various aspects of the American experience. The public summary files contain some 20,000+ estimates ranging from the breakdown of the language spoken to the length of the average commute. It provides unprecendented insight into the changing face of the American landscape and is used by non-profits, corporations, and government entities to further their missions. Below, the <a href="https://www.commerce.gov/dataservice/">Commerce Data Service</a> shows how to take advantage of this vast wealth of public data by merging it with <a href="http://www.consumerfinance.gov/">Consumer Financial Protection Bureau</a> <a href="http://www.consumerfinance.gov/complaintdatabase/">Consumer Complaint Database</a> and highlighting specific areas of need.
+                    Among the largest surveys conducted by the United States Census Bureau is the American Community Survey (<a href="https://www.census.gov/programs-surveys/acs/">ACS</a>), an ambitious program to better understand the American experience. Covering a sample of over 3 million respondents each year, the aggregate summary data is published with details of hundreds of attributes, such as language spoken to average commute time to public assistance usage among others. The data is provided in standard geographic levels of aggregation (e.g. <a href="https://www.census.gov/geo/reference/gtc/gtc_ct.html">Census tracts</a>, <a href="https://www.census.gov/geo/reference/gtc/gtc_cou.html">counties</a> and states), which enables the ACS to be joined to external data sources that are similarly aggregated. Given its versatility and robustness, the data is a mainstay of social research and enables organizations to be more data-driven, whether they are non-profits, corporations, or government agencies.
+                      
                     </p>
                 </div>
             </div>
@@ -192,15 +193,11 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <!---First Graphs-->
 
 <div id="dist" class="section level3 container-fluid main-container">
-<p>The wealth of data provided by the ACS allows anyone to identify neighborhoods (<a href="https://www.census.gov/geo/reference/gtc/gtc_ct.html">Census tracts</a>) with specific traits.</p>
-<p>Consider a non-profit that provides aid to:</p>
-    <ul>
-        <li>girls under 5,</li>
-        <li>who lived in the same house one year ago,</li>
-        <li>and have also collected SNAP benefits over that past year.</li>
-    </ul> 
-<p>ACS 5-year estimates would allow for that non-profit to focus on specific Census tracts with these characteristics instead of using estimates at the county or state level. They could also append additional datasets onto the Census tract level estimates. For our example, we took the CFPB Consumer Complaint Database, transformed the counts of complaints from each zip code and transformed them to Census tracts, using the <a href="http://www2.census.gov/geo/docs/maps-data/data/rel/zcta_tract_rel_10.txt">Census Tract to ZCTA relationship file</a>. Below we show the truncated distribution of the number of financial complaints per Census Tract.</p>
+<p>
+    Imagine a nonprofit that has a national mandate to provide aid and services, specifically to financially distressed neighborhoods with girls under the age of 5, who live in households that collect SNAP benefits, and have remained in the same home over the past year. As it turns out, ACS 5-year estimates would allow for an analyst at a non-profit to focus on geographic units that are far smaller than a county, such as Census tracts. And as Census tracts are a common unit of analysis, additional datasets can be merged to improve the diversity of data and better characterize a local neighborhood.
 
+    For this example, we took the CFPB Consumer Complaint Database, transformed the counts of complaints from each zip code and transformed them to Census tracts, using the <a href="http://www2.census.gov/geo/docs/maps-data/data/rel/zcta_tract_rel_10.txt">Census Tract to ZCTA relationship</a> file. Below we show the truncated distribution of the number of financial complaints per Census Tract.</p>
+    
 <iframe src="vis/dist.html" marginwidth="0" frameborder = "0"  marginheight="0" scrolling="no" width="100%" height="100%"></iframe>
 
 <p>From the distribution, we can see that very few Census tracts receive more than ten financial complaints. Thus, we can limit our focus to those Census tracts.</p>
