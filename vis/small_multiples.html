@@ -33,6 +33,7 @@
     var layer4 = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png');
 
     var map1 = L.map('map1', {
+        maxZoom: 12, minZoom: 6,
         // layers: [layer1, json],
         layers: [layer1],
         center: [32.7990,-86.8073],
@@ -42,6 +43,7 @@
     map1.attributionControl.setPrefix('');
 
     var map2 = L.map('map2', {
+        maxZoom: 12, minZoom: 6,
         layers: [layer2],
         center: [32.7990,-86.8073],
         zoom: 6,
@@ -51,6 +53,7 @@
     map2.attributionControl.setPrefix('');
 
     var map3 = L.map('map3', {
+        maxZoom: 12, minZoom: 6,
         layers: [layer3],
         center: [32.7990,-86.8073],
         zoom: 6,
@@ -60,6 +63,7 @@
     map3.attributionControl.setPrefix('');
 
     var map4 = L.map('map4', {
+        maxZoom: 12, minZoom: 6,
         layers: [layer4],
         center: [32.7990,-86.8073],
         zoom: 6,
