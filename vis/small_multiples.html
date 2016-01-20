@@ -27,10 +27,18 @@
     <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
     <script type="text/javascript">
 
-    var layer1 = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png');
-    var layer2 = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png');
-    var layer3 = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png');
-    var layer4 = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png');
+    var layer1 = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+      attribution: 'Girls under Five'
+    });
+    var layer2 = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      attribution: 'Families living in the same house one year ago'
+    });
+    var layer3 = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+      attribution: 'Families in a household that collected SNAP benefits over the past year'
+    });
+    var layer4 = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+      attribution: 'Tracts with 10 or more financial complaints'
+    });
 
     var map1 = L.map('map1', {
         maxZoom: 12, minZoom: 6,
@@ -69,6 +77,8 @@
         zoom: 6,
         zoomControl: false
     });
+
+    map4.attributionControl.setPrefix('');
 
     var stateLayer1 = L.geoJson(null, {
       filter: function(feature, layer){
