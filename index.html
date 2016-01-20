@@ -142,7 +142,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
                 <h2 style="position:absolute;left:15%; top:40%;text-align:left;background-color:black;border-radius:10px;opacity:0.9;">
                     <div id="woot">
                         <span style="font-size:150%;line-height:1.3;" >
-                          focusing <br>outreach using<br>survey data</strong></span><br>
+                         <strong> extending <br> the ACS: </strong><br> data-driven <br>outreach</span><br>
                           <a id = "btn" href="https://github.com/CommerceDataService/tutorial_acs_rank/zipball/master"> <strong>ZIP File</strong></a>
                           <a id = "btn" href="https://github.com/CommerceDataService/tutorial_acs_rank/tarball/master"> <strong>TAR Ball</strong></a>
                           <a id = "btn" href="https://github.com/CommerceDataService/tutorial_acs_rank"><strong>GitHub</strong></a>
@@ -165,7 +165,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
                     <small>
                     <strong>Technical Guidance</strong><br>
                      <ul>
-                       <li>Census Bureau</li>
+                       <li>U.S. Census Bureau</li>
                      </ul>
                     <strong>Visualizations</strong><br>
                     <ul>
@@ -180,7 +180,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
                 <div class="col-lg-7">
                   <p style="font-family:Helvetica;"><span style="font-size:150%;color:darkred;"><strong>Every month, hundreds of thousands of households fill out the American Community Survey.</strong></span>
                     <br>
-                    Among the largest surveys conducted by the United States Census Bureau is the American Community Survey (<a href="https://www.census.gov/programs-surveys/acs/">ACS</a>), an ambitious program to better understand the American experience. Covering a sample of over 3 million respondents each year, the aggregate summary data is published with details of hundreds of attributes, such as language spoken to average commute time to public assistance usage among others. The data is provided in standard geographic levels of aggregation (e.g. <a href="https://www.census.gov/geo/reference/gtc/gtc_ct.html">Census tracts</a>, <a href="https://www.census.gov/geo/reference/gtc/gtc_cou.html">counties</a> and states), which enables the ACS to be joined to external data sources that are similarly aggregated. Given its versatility and robustness, the data is a mainstay of social research and enables organizations to be more data-driven, whether they are non-profits, corporations, or government agencies.
+                    Among the largest surveys conducted by the <a href="https://www.census.gov">U.S. Census Bureau </a> is the American Community Survey (<a href="https://www.census.gov/programs-surveys/acs/">ACS</a>), an ambitious program to better understand the American experience. Covering a sample of over 3 million respondents each year, the aggregate summary data is published with details of hundreds of attributes, such as language spoken to average commute time to public assistance usage among others. The data is provided in standard geographic levels of aggregation (e.g. <a href="https://www.census.gov/geo/reference/gtc/gtc_ct.html">Census tracts</a>, <a href="https://www.census.gov/geo/reference/gtc/gtc_cou.html">counties</a> and states), which enables the ACS to be joined to external data sources that are similarly aggregated. Given its versatility and robustness, the data is a mainstay of social research and enables organizations to be more data-driven, whether they are non-profits, corporations, or government agencies.
                       
                     </p>
                 </div>
@@ -194,13 +194,11 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 <div id="dist" class="section level3 container-fluid main-container">
 <p>
-    Imagine a nonprofit that has a national mandate to provide aid and services, specifically to financially distressed neighborhoods with girls under the age of 5, who live in households that collect SNAP benefits, and have remained in the same home over the past year. As it turns out, ACS 5-year estimates would allow for an analyst at a non-profit to focus on geographic units that are far smaller than a county, such as Census tracts. And as Census tracts are a common unit of analysis, additional datasets can be merged to improve the diversity of data and better characterize a local neighborhood.
+    Imagine a nonprofit that has a national mandate to provide aid and services, specifically to financially distressed neighborhoods with girls under the age of 5, who live in households that collect SNAP benefits, and have remained in the same home over the past year. As it turns out, ACS five-year estimates would allow for an analyst at a non-profit to focus on geographic units that are far smaller than a county, such as Census tracts. And as Census tracts are a common unit of analysis, additional datasets can be merged to improve the diversity of data and better characterize a local neighborhood.
 
-    For this example, we took the CFPB Consumer Complaint Database, transformed the counts of complaints from each zip code and transformed them to Census tracts, using the <a href="http://www2.census.gov/geo/docs/maps-data/data/rel/zcta_tract_rel_10.txt">Census Tract to ZCTA relationship</a> file. Below we show the truncated distribution of the number of financial complaints per Census Tract.</p>
+For this example, we used the <a href="http://www.consumerfinance.gov/complaintdatabase/">Consumer Complaint Database </a> produced by the <a href="http://www.consumerfinance.gov">Consumer Financial Protection Bureau </a> and transformed the counts of complaints from each zipcode and into to Census tract approximations following  the <a href="http://www2.census.gov/geo/docs/maps-data/data/rel/zcta_tract_rel_10.txt">Census tract to ZCTA relationship</a> file. In the interactive graph below, we show the distribution of the number of financial complaints limited to a maximum of 60 complaints and can see that few Census tracts receive more than ten financial complaints. Thus, we can limit our focus to those areas.</p>
     
 <iframe src="vis/dist.html" marginwidth="0" frameborder = "0"  marginheight="0" scrolling="no" width="100%" height="70%"></iframe>
-
-<p>From the distribution, we can see that very few Census tracts receive more than ten financial complaints. Thus, we can limit our focus to those Census tracts.</p>
 
 </div>
 
@@ -208,7 +206,9 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <span style="font-size:150%;color:darkred;"><strong><br>So how do we get ACS data?</strong></span>
 <p></p>
 
-<p>The American Community Survey is a very large survey. ACS releases datasets on a 1, 3 and 5-year basis with increasing specificity in geography. We focused on the 5-year estimates, which affords us the most insight by geography. With 20,000+ estimates produced about the American experience, it can be very hard to just search and explore the datasets that comprise the ACS data repository. For those who want to have a cursory glance at the available data, there is the <a href="http://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml">US Census Bureau's American Factfinder</a>. For those that want dynamic access, the ACS 5-year release is part of the US Census Bureau's <a href="http://www.census.gov/data/developers/data-sets.html">available APIs</a>. Here, we show you how to access the ACS 5-year estimates using a third method that is easier for bulk analysis. Due to the size of the ACS, the US Census Bureau usually breaks the ACS 5-year release into 4 parts:</p>
+<p>The American Community Survey releases datasets on one, three and five-year aggregates at varying levels of geographic specificity. With 20,000+ attributes collected on the American experience, it can be challenging to explore and search the attributes in the ACS data repository.  For a cursory glance at the available data, there is the <a href="http://factfinder.census.gov/faces/nav/jsf/pages/index.xhtml">US Census Bureau's American Factfinder</a>. For dynamic access, the ACS five-year release is available through of the US Census Bureau's <a href="http://www.census.gov/data/developers/data-sets.html"> APIs</a>. Here, we show how to access the ACS five-year estimates using a third method that is easier for bulk analysis of Census tract-level data.
+    
+    Due to the size of the ACS, the US Census Bureau breaks the ACS five-year release into five parts:</p>
     <ul>
         <li>the <a href="http://api.census.gov/data/2014/acs5/variables.json">ACS Variable Inventory</a>,</li>
         <li>the <a href="http://www2.census.gov/programs-surveys/acs/summary_file/2013/documentation/user_tools/2013_5yr_SAS.zip">ACS SAS processing code</a>,</li>
@@ -216,11 +216,12 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
         <li>the <a href="http://www2.census.gov/programs-surveys/acs/summary_file/2013/data/5_year_entire_sf/Tracts_Block_Groups_Only.tar.gz">ACS estimates (Tract and Block GroupLevel)</a>,</li>
         <li> and the <a href="https://www.census.gov/geo/maps-data/data/cbf/cbf_tracts.html">Census tract shapefiles.</a></li>
     </ul>
-<p>You can see from the information above that a bulk download of ACS 5-year estimates divorces the metadata from the actual estimates. The process to get any specific estimate for the nation at the tract level is roughly:</p>
+    
+<p>You can see from the information above that a bulk download of ACS five-year aggregates separates the metadata from the actual estimates. The process to get any specific estimate for the nation at the tract level is roughly:</p>
     <ol>
         <li>Extract the variable name from Variable Inventory</li>
         <li>Find the table number containing variable name from the SAS program</li>
-        <li>Pull the actual estiamte from the correct ACS estimates file</li>
+        <li>Pull the actual estimate from the correct ACS estimates file</li>
         <li>Match the relevant log record number to find the correct geography from the Geography Files</li>
         <li>Rinse, repeat for each state</li>
     </ol>
@@ -230,20 +231,20 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="map" class="section level3 container-fluid main-container">
 <span style="font-size:150%;color:darkred;"><strong><br>So where are they located?</strong></span>
 
-<p>Back to our non-profit example. Given the measures that we are interested in:</p>
+<p>Back to our non-profit example. Recall the measures that we are interested in:</p>
 
     <ul>
-        <li>girls under 5,</li>
+        <li>girls under five,</li>
         <li>who lived in the same house one year ago,</li>
-        <li>have also collected SNAP benefits over that past year,</li>
-        <li>and financial complaints,</li>
+        <li>lived in a household that collected SNAP benefits over the past year,</li>
+        <li>and reside in a tract with 10 or more financial complaints,</li>
     </ul> 
 
-<p>How do we determine the Census tracts we should focus on? Below we map the top 30th percentile for the state of Alabama for each ACS estimate and any Census tract with more than ten financial complaints. We see that there are many highlighted Census tracts.</p>
+<p>How does an analyst determine where a non-profit should focus its efforts? Below we highlight Census tracts in state of Alabama that are in the top 30th percentile for each ACS estimate or have more than ten financial complaints. Each pane shows a different measure of interest, highlighting seemingly different areas for outreach.</p>
 <br>
 <iframe src="vis/small_multiples.html" marginwidth="0" frameborder = "0"  marginheight="0" scrolling="no" width="100%" height="100%"></iframe>
 <br><br>
-<p>Now, how can we highlight only those tracts that are highest ranked for our criteria? We take the intersection of all those variables and map them again to find our areas of interest. Below we show that map nationally and list the top ten Census tracts for any view.</p>
+<p>Now, how can we highlight only those tracts that are highest ranked for across all of the criteria? By averaging the rank of each tract across all measures, we can map them again to find candidates for outreach. This data-driven methodology is simple yet holds the potential of large returns. Below we show that map nationally and list the top ten Census tracts for any view. T</p>
 <br>
 <iframe src="vis/final_countdown.html" marginwidth="0" frameborder = "0"  marginheight="0" scrolling="no" width="100%" height="100%"></iframe>
 <br>
