@@ -111,7 +111,7 @@ corslite('../tracts/us_all_tracts.topojson', function(err, resp) {
   svg.append("rect")
     .attr("width", "100%")
     .attr("height", "100%")
-    .style("fill", "rgb(44, 62, 80)"); 
+    .style("fill", "#7f8c8d"); 
   var topten = new dimple.chart(svg, filterData(data)),
     y = topten.addCategoryAxis("y", "Location"),
     x = topten.addMeasureAxis("x", "Need"),
@@ -130,7 +130,7 @@ corslite('../tracts/us_all_tracts.topojson', function(err, resp) {
     .attr("x", topten._xPixels() + topten._widthPixels() / 2)
     .attr("y", topten._yPixels() - 20)
     .style("text-anchor", "middle")
-    .style("fill", "rgb(236, 240, 241)")
+    .style("fill", "#ecf0f1")
     .style("font-family", "Helvetica")
     .style("font-size", "12px")
     // .style("font-weight", "bold")
@@ -140,7 +140,7 @@ corslite('../tracts/us_all_tracts.topojson', function(err, resp) {
     .attr("x", topten._xPixels() + topten._widthPixels() / 2)
     .attr("y", topten._yPixels() - 5)
     .style("text-anchor", "middle")
-    .style("fill", "rgb(236, 240, 241)")
+    .style("fill", "#ecf0f1")
     .style("font-family", "Helvetica")
     .style("font-size", "12px")
     // .style("font-weight", "bold")

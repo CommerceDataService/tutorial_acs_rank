@@ -1,0 +1,5 @@
+*.xml
+*.zip
+*.sublime-project
+*.sublime-workspace
+.ipynb_checkpoints/
